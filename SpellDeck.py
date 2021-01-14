@@ -23,7 +23,20 @@ class spell(object):
         print('{:s} ({:d})'.format(self.name,self.level))
 
 
-HAND = 4
+class deck(object):
+    def __init__(self,spells):
+        self.spells = spells
+
+    def makeHand(self,HAND):
+        random.shuffle(self.spells)
+        hand = [spells[i] for i in range(HAND)]
+
+        sortfunc = lambda x: x.level
+        hand.sort(key=sortfunc)
+        return hand
+
+    
+HAND = 10
 
 
 spells = []
@@ -35,12 +48,13 @@ with open('spells.txt') as file:
         name, level = formatted_line[0],formatted_line[1]
         spells.append(spell(name,int(level)))
 
+spelldeck = deck(spells)
 
 while True:
-    random.shuffle(spells)
 
-    for s in range(HAND):
-        spells[s].desc()
+    hand = spelldeck.makeHand(HAND)
+    for s in hand:
+        s.desc()
 
     x = input()
     if x == 'q':
